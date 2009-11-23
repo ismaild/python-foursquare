@@ -1,5 +1,5 @@
 """
-foursquare.py
+foursquare.py - v0.1
 
 A simple python wrapper for the foursquare API.
 
@@ -7,6 +7,7 @@ http://www.foursquare.com
 http://api.foursquare.com
 
 Created by Ismail Dhorat @ http://zyelabs.net
+
 """
 import urllib
 import simplejson
@@ -17,6 +18,20 @@ class foursquare():
         self.api_version = 'v1'
         self.url = self.base_url + '/' + self.api_version + '/'
         self.output = '.json'
+    
+    def _return_result(self, query_url):
+        """
+        Internal meathod to return the results
+        
+        Args: query_url
+        
+        Returns: JSON/Dictionary of the objects returned by the API
+        """
+        try:
+            result = simplejson.load(urllib.urlopen(query_url))
+        except:
+            result = {'error': 'Error Loading URL', 'response': 'error' }
+        return result
         
     def test(self):
         url = self.url
@@ -25,7 +40,7 @@ class foursquare():
         
         Args: None
         
-        Results: 
+        Returns: 
             True: Test was succesfull
             or 
             False: The query resulted in an Error 
@@ -34,16 +49,12 @@ class foursquare():
             f = foursquare()
             t = f.test()
             if t: print "I see dead people!" 
-            
         """
         query_url = self.url + 'test' + self.output
-        try:
-            dump = simplejson.load(urllib.urlopen(query_url))
-            if dump['response'] == 'ok':
-                result = True
-            else: 
-                result = False
-        except:
+        check = result2 = self._return_result(query_url)
+        if check['response'] == 'ok':
+            result = True
+        else: 
             result = False
         return result
         
@@ -53,20 +64,40 @@ class foursquare():
         
         Args: None
         
-        Results: 
-            A dictionary of cities, with lattitude, longitude, name, shortname & id
+        Returns: All cities
         
         Usgae:
             f = foursquare()
-            f.get_cities
-            
+            f.get_cities           
         """
         query_url = self.url + 'cities' + self.output 
-        try:
-            result = simplejson.load(urllib.urlopen(query_url))
-        except:
-            result = 'There was an error'
+        result = self._return_result(query_url)
         return result
+    
+    def get_venues(self, lat, lon, search='', limit=''):
+        """
+        Get venues close by for a given longitude and latitude
+        
+        args: 
+          required: 
+            latitude, longitude
+          optional:
+            limit=10
+            search=Food
+        
+        Returns: Venues close to Lat, Lon passed
+        
+        Usage:
+            f = foursquare()
+            f.get_cities()
+        """
+        query_url = self.url + 'venues' + self.output
+        params = urllib.urlencode({'geolat': lat, 'geolong': lon, 'q': search, 'l': limit})
+        query_url = (query_url + '?%s') % params
+        result = self._return_result(query_url)
+        return result
+
+
 
 
         

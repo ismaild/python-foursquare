@@ -11,6 +11,6 @@ Please note: This is a work in progress and does not implement all the API calls
 Usage:
 	f = foursquare()
 	test = f.test()
-	cities = f.get_citieS()
+	cities = f.get_cities()
 	venues = f.get_venues(lat, lon)
 	tips = f.get_tips(lat, lon)

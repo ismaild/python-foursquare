@@ -51,7 +51,7 @@ class foursquare():
             if t: print "I see dead people!" 
         """
         query_url = self.url + 'test' + self.output
-        check = result2 = self._return_result(query_url)
+        check = self._return_result(query_url)
         if check['response'] == 'ok':
             result = True
         else: 

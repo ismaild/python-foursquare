@@ -64,7 +64,7 @@ class foursquare():
         
         Args: None
         
-        Returns: All cities
+        Returns: Dictionary/JSON of All cities
         
         Usgae:
             f = foursquare()
@@ -82,22 +82,53 @@ class foursquare():
           required: 
             latitude, longitude
           optional:
-            limit=10
-            search=Food
+            limit=
+            search=
         
-        Returns: Venues close to Lat, Lon passed
+        Returns: Dictionary/JSON of Venues close to Lat, Lon passed
         
         Usage:
             f = foursquare()
-            f.get_cities()
+            v = f.get_venues(-26.091874,28.057225)
         """
         query_url = self.url + 'venues' + self.output
         params = urllib.urlencode({'geolat': lat, 'geolong': lon, 'q': search, 'l': limit})
         query_url = (query_url + '?%s') % params
         result = self._return_result(query_url)
         return result
+        
+    def get_tips(self, lat, lon, limit=''):
+        """
+        Get Tips closeby for a given longitude and lattitude
+        
+        args: 
+          required: 
+            latitude, longitude
+          optional:
+            limit=
+        Returns Dictionary/JSON of tips for lat,lon passed
+        """
+        query_url = self.url + 'tips' + self.output
+        params = urllib.urlencode({'geolat': lat, 'geolong': lon, 'l': limit})
+        query_url = (query_url + '?%s') % params
+        result = self._return_result(query_url)
+        return result
+    
 
-
+f = foursquare()
+#y = f.get_venues(-26.091874,28.057225)  
+c = f.get_cities()
+print "-"*30
+print "Printing city"
+print c
+t = f.test()
+print t
+print "Printing Venues"
+v = f.get_venues(-26.091874,28.057225, search='morning')
+print v
+print "Printing TIPS"
+ti = f.get_tips(-26.091874,28.057225)
+print ti
 
 
         

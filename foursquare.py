@@ -13,13 +13,11 @@ class foursquare():
     Created by Ismail Dhorat @ http://zyelabs.net
     
     Usage:
-    f = foursquare()
-    f.method(requiredargs, optionalargs)
+    foursquare.method(requiredargs, optionalargs)
     
-    i.e
-    f.get_cities()
-    f.get_venues(-27.091874,29.057225)
-    f.get_venues(-27.091874,29.057225, limit=10)
+    foursquare.get_cities()    
+    foursquare.get_venues(-27.091874,29.057225)
+    foursquare.get_venues(-27.091874,29.057225, limit=10)
 
     """
     def __init__(self):
@@ -39,8 +37,8 @@ class foursquare():
         Internal method to return the results
         
         Args: 
-            required: endpoint (What kind of request is this?)
-            optionnal: params (a dictionary of get params and values)
+        endpoint -- required (What kind of request is this?)
+        params -- optional (a dictionary of get params and values)
         
         Returns: JSON/Dictionary of the objects returned by the API
         """
@@ -64,9 +62,8 @@ class foursquare():
         Args: None
         
         Returns: 
-            True: Test was succesfull
-            or 
-            False: The query resulted in an Error 
+        True -- Test was succesful or
+        False -- The query resulted in an Error 
         """
         check = self._return_result('test')
         if check['response'] == 'ok':
@@ -90,8 +87,12 @@ class foursquare():
         Get venues close by for a given longitude and latitude
         
         args: 
-          required: latitude, longitude
-          optional: limit=, search=
+        latitude -- Required
+        longitude -- Required
+        
+        keyword arguments:
+        limit -- Limit the number of records returned
+        search -- search for a specific keyword
         
         Returns: Dictionary/JSON of Venues close to Lat, Lon passed
         
@@ -101,11 +102,14 @@ class foursquare():
         
     def get_tips(self, lat, lon, limit=''):
         """
-        Get Tips closeby for a given longitude and lattitude
+        Get Tips closeby for a given longitude and latitude
         
         args: 
-          required: latitude, longitude
-          optional: limit=
+        latitude -- Required
+        longitude -- Required
+        
+        keyword arguments:
+        limit -- Limit the number of records returned
         
         Returns: Dictionary/JSON of tips for lat,lon passed
         """

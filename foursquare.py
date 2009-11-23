@@ -1,3 +1,4 @@
+import urllib2
 import urllib
 import simplejson
 
@@ -18,7 +19,6 @@ class foursquare():
     foursquare.get_cities()    
     foursquare.get_venues(-27.091874,29.057225)
     foursquare.get_venues(-27.091874,29.057225, limit=10)
-
     """
     def __init__(self):
         self.base_url = 'http://api.foursquare.com'
@@ -29,7 +29,9 @@ class foursquare():
             'test': 'test', 
             'cities': 'cities',
             'venues': 'venues',
-            'tips' : 'tips'
+            'tips' : 'tips',
+            'checkcity': 'checkcity',
+            'switchcity': 'switchcity'
         }
     
     def _return_result(self, endpoint, params=None):
@@ -39,20 +41,13 @@ class foursquare():
         Args: 
         endpoint -- required (What kind of request is this?)
         params -- optional (a dictionary of get params and values)
-        
-        Returns: JSON/Dictionary of the objects returned by the API
         """
-        try:
-            endpoint = self.endpoints[endpoint]
-            query_url = self.url + endpoint + self.output
-            if params:
-                query_url = (query_url + '?%s') % urllib.urlencode(params)
-            try:
-                result = simplejson.load(urllib.urlopen(query_url))
-            except:
-                result = {'error': 'Error Loading URL', 'response': 'error' }
-        except:
-            result = {'error': 'Invalid Endpoint', 'response':'error'}
+        endpoint = self.endpoints[endpoint]
+        query_url = self.url + endpoint + self.output
+        if params:
+            query_url = (query_url + '?%s') % urllib.urlencode(params)
+        print query_url
+        result = simplejson.load(urllib2.urlopen(query_url))
         return result
         
     def test(self):
@@ -74,44 +69,48 @@ class foursquare():
         
     def get_cities(self):
         """
-        Get a list of cities
+        Returns all cities
         
         Args: None
-        
-        Returns: Dictionary/JSON of All cities   
         """
         return self._return_result('cities')
     
     def get_venues(self, lat, lon, search='', limit=''):
         """
-        Get venues close by for a given longitude and latitude
+        Returns venues within range for a given lat & lon
         
         args: 
         latitude -- Required
         longitude -- Required
         
         keyword arguments:
-        limit -- Limit the number of records returned
-        search -- search for a specific keyword
-        
-        Returns: Dictionary/JSON of Venues close to Lat, Lon passed
-        
+        limit -- optional 
+        search -- optional
         """
         params = {'geolat': lat, 'geolong': lon, 'q': search, 'l': limit}
         return self._return_result('venues', params=params)
         
     def get_tips(self, lat, lon, limit=''):
         """
-        Get Tips closeby for a given longitude and latitude
+        Returns tips within range of a given lat & lon
         
         args: 
         latitude -- Required
         longitude -- Required
         
         keyword arguments:
-        limit -- Limit the number of records returned
-        
-        Returns: Dictionary/JSON of tips for lat,lon passed
+        limit -- optional
         """
         params = {'geolat': lat, 'geolong': lon, 'l': limit}
         return self._return_result('tips', params=params)
+    
+    def check_city(self, lat, lon):
+        """
+        Returns the closest foursquare city for a give lat & lon
+        
+        args:
+        lat - required
+        lon - required
+        """
+        params = {'geolat': lat, 'geolong': lon}
+        return self._return_result('checkcity', params=params)

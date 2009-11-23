@@ -6,6 +6,7 @@ http://www.foursquare.com
 http://api.foursquare.com
 
 Created by Ismail Dhorat @ http://zyelabs.net
+Please note: This is a work in progress and does not implement all the API calls just yet.
 
 Usage:
 	f = foursquare()

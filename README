@@ -1,0 +1,15 @@
+foursquare.py - v0.1
+
+A simple python wrapper for the foursquare API.
+
+http://www.foursquare.com
+http://api.foursquare.com
+
+Created by Ismail Dhorat @ http://zyelabs.net
+
+Usage:
+	f = foursquare()
+	test = f.test()
+	cities = f.get_citieS()
+	venues = f.get_venues(lat, lon)
+	tips = f.get_tips(lat, lon)

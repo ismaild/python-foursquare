@@ -106,30 +106,13 @@ class foursquare():
             latitude, longitude
           optional:
             limit=
-        Returns Dictionary/JSON of tips for lat,lon passed
+        Returns Dictionary/JSON of tips for lat,lon passed`
         """
         query_url = self.url + 'tips' + self.output
         params = urllib.urlencode({'geolat': lat, 'geolong': lon, 'l': limit})
         query_url = (query_url + '?%s') % params
         result = self._return_result(query_url)
         return result
-    
-
-f = foursquare()
-#y = f.get_venues(-26.091874,28.057225)  
-c = f.get_cities()
-print "-"*30
-print "Printing city"
-print c
-t = f.test()
-print t
-print "Printing Venues"
-v = f.get_venues(-26.091874,28.057225, search='morning')
-print v
-print "Printing TIPS"
-ti = f.get_tips(-26.091874,28.057225)
-print ti
-
 
         
     

@@ -4,7 +4,7 @@ import simplejson
 
 class foursquare():
     """
-    foursquare.py - v0.1
+    foursquare.py - v0.1.2
 
     A simple python wrapper for the foursquare API.
 
@@ -16,9 +16,7 @@ class foursquare():
     Usage:
     foursquare.method(requiredargs, optionalargs)
     
-    foursquare.get_cities()    
-    foursquare.get_venues(-27.091874,29.057225)
-    foursquare.get_venues(-27.091874,29.057225, limit=10)
+    Supported Methods:
     """
     def __init__(self):
         self.base_url = 'http://api.foursquare.com'
@@ -31,7 +29,7 @@ class foursquare():
             'venues': 'venues',
             'tips' : 'tips',
             'checkcity': 'checkcity',
-            'switchcity': 'switchcity'
+            'venue': 'venue'
         }
     
     def _return_result(self, endpoint, params=None):
@@ -114,3 +112,13 @@ class foursquare():
         """
         params = {'geolat': lat, 'geolong': lon}
         return self._return_result('checkcity', params=params)
+
+    def get_venue_details(self, vid):
+        """
+        Returns detailed info for a specific venue
+        
+        args:
+        venuid
+        """
+        params = {'vid': vid }
+        return self._return_result('venue', params=params)

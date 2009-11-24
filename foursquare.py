@@ -5,7 +5,7 @@ import simplejson
 
 class foursquare():
     """
-    foursquare.py - v0.1.
+    foursquare.py - v0.1.3
 
     A simple python wrapper for the foursquare API.
 

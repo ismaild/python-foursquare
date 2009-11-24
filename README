@@ -16,45 +16,16 @@ Usage:
 	tips = f.get_tips(lat, lon)
 
 
-Foursquare Methods defined:
+API Methods defined:
 
-get_cities(self)
-    Get a list of cities
-    
-    Args: None
-    
-    Returns: Dictionary/JSON of All cities
+foursquare.test()
+foursquare.get_cities()
+foursquare.get_venues()
+foursquare.get_tips()
+foursquare.check_city()
+foursquare.get_venue_detail()
+foursquare.get_history()
+foursquare.get_user_detail()
+foursquare.get_friends()
+foursquare.get_checkins()
 
-get_tips(self, lat, lon, limit='')
-    Get Tips closeby for a given longitude and latitude
-    
-    args: 
-    latitude -- Required
-    longitude -- Required
-    
-    keyword arguments:
-    limit -- Limit the number of records returned
-    
-    Returns: Dictionary/JSON of tips for lat,lon passed
-
-get_venues(self, lat, lon, search='', limit='')
-    Get venues close by for a given longitude and latitude
-    
-    args: 
-    latitude -- Required
-    longitude -- Required
-    
-    keyword arguments:
-    limit -- Limit the number of records returned
-    search -- search for a specific keyword
-    
-    Returns: Dictionary/JSON of Venues close to Lat, Lon passed
-
-test(self)
-    Test if an API request will succeed
-    
-    Args: None
-    
-    Returns: 
-    True -- Test was successful or
-    False -- The query resulted in an Error

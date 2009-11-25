@@ -1,6 +1,6 @@
-"""
+""
 
-Foursquare.py - v0.1.4
+Foursquare.py - v0.1.1
 =======================
 A simple python wrapper for the foursquare API.
 

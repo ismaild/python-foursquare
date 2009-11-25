@@ -3,9 +3,9 @@ import urllib
 import base64
 import simplejson
 
-class foursquare():
+class Api():
     """
-    foursquare.py - v0.1.3
+    foursquare.py - v0.1.4
 
     A simple python wrapper for the foursquare API.
 
@@ -16,10 +16,7 @@ class foursquare():
     
     Usage:
     foursquare.method(requiredargs, optionalargs)
-    
-    foursquare.get_cities()    
-    foursquare.get_venues(-27.091874,29.057225)
-    foursquare.get_venues(-27.091874,29.057225, l=10)
+    help(foursquare) -- for help
     
     * Optional args are keyword arguments and the keyword is mapped to the get param needed by the foursquare api
     """
@@ -27,7 +24,7 @@ class foursquare():
         self.url = 'http://api.foursquare.com/v1/'
         self.output = '.json'
     
-    def _return_result(self, endpoint, username=None, password=None, params=None):
+    def _return_result(self, endpoint, username=None, password=None, params=None, post=None):
         """
         Internal method to return the results
         
@@ -35,20 +32,35 @@ class foursquare():
         - endpoint 
         
         keyword args(optional):
-        - username
-        - password
-        - params
+        - username (Required for authenticated requests)
+        - password (required for authenticated requests)
+        - params (Optional params)
+        - post  (Should be set to True for a http POST request)
         """
         query_url = self.url + endpoint + self.output
-        if params:
-            query_url = (query_url + '?%s') % urllib.urlencode(params)
-        request = urllib2.Request(query_url)
+        if not post:
+            if params:
+                data = urllib.urlencode(params)
+                request = urllib2.Request('%s?%s' % (query_url, data) )
+            else:
+                request = urllib2.Request(query_url)
+        else:
+            if params:
+                data = urllib.urlencode(params)
+                request = urllib2.Request(query_url, data)
+            else:
+                request = urllib2.Request(query_url)
 
         if username and password:
             b64 = base64.encodestring('%s:%s' % (username, password))[:-1]
             authheader="Basic %s" % b64
             request.add_header('Authorization', authheader)
-        return simplejson.load(urllib2.urlopen(request))
+        try:
+            result = simplejson.load(urllib2.urlopen(request))
+        except IOError, e:
+            if e.code:
+                result = e
+        return result
         
     def test(self):
         """ 
@@ -57,16 +69,13 @@ class foursquare():
         Args: None
         
         Returns: 
-        True -- Test was succesful or
-        False -- The query resulted in an Error 
+        True  (Test was succesful)
+        False (The query resulted in an Error) 
         """
         check = self._return_result('test')
-        if check['response'] == 'ok':
-            result = True
-        else: 
-            result = False
-        return result
-        
+        return check['response'] == 'ok'
+    
+    # Geo methods
     def get_cities(self):
         """
         Returns all cities
@@ -74,63 +83,64 @@ class foursquare():
         Args: None
         """
         return self._return_result('cities')
-    
-    def get_venues(self, lat, lon, **kwargs):
-        """
-        Returns venues within range for a given lat & lon
-        
-        args: 
-        latitude -- Required
-        longitude -- Required
-        
-        keyword args (Optional):
-        l=10 --- Limit results
-        q=food --- search for keyword
-        """
-        kwargs['geolat'] = lat
-        kwargs['geolong'] = lon
-        return self._return_result('venues', params=kwargs)
-        
-    def get_tips(self, lat, lon, **kwargs):
-        """
-        Returns tips within range of a given lat & lon
-        
-        args (required): 
-        - latitude
-        - longitude
-        
-        Keyword Args (optional):
-        - l=10
-        """
-        kwargs['geolat'] = lat
-        kwargs['geolong'] = lon
-        return self._return_result('tips', params=kwargs)
-    
-    def check_city(self, lat, lon):
+
+    def check_city(self, geolat, geolong):
         """
         Returns the closest foursquare city for a give lat & lon
         
         args (required):
-        - lat
-        - lon
+        - geolat  (latitude)
+        - geolong  (longitude)
         """
-        params = {'geolat': lat, 'geolong': lon}
+        params = {'geolat': geolat, 'geolong': geolong}
         return self._return_result('checkcity', params=params)
     
-    def get_venue_detail(self, vid , username=None, password=None,):
+    def switch_city(self, username, password, cityid):
         """
-        Returns detailed info for a specific venue
+        Switch city for authenticated user to a given cityid
         
         args (required):
-        - vid 
-        
-        keyword args (optional):
         - username
         - password
+        - cityid
+        
         """
-        params = {'vid': vid }
-        return self._return_result('venue', username=username, password=password, params=params)
+        return self._return_result('switchcity', username=username, password=password, params={'cityid': cityid}, post=True)
     
+    # Check in methods
+    def get_checkins(self, username, password, **kwargs):
+        """
+        Returns checkins for friends of authenticated user
+        
+        Args (required):
+        - username
+        - password
+        
+        keyword args (optional):
+        - cityid
+        """
+        return self._return_result('checkins', username=username, password=password, params=kwargs)
+    
+    def checkin(self, username, password, **kwargs):
+        """
+        Check in the authenticated user
+        
+        Args (required):
+        - username
+        - password
+        - At least 1 of either vid, shoutout, venue
+        
+        keyword args (optional)
+        - vid  (ID of the venue)
+        - venue (String name of the venue)
+        - shout (max length is 140)
+        - private (1 or 0)
+        - twitter (1 or 0, defaults to users setting)
+        - geolat
+        - geolong
+        """
+        return self._return_result('checkin', username=username, password=password, params=kwargs, post=True)
+
     def get_history(self, username, password):
         """
         Returns a history for the authenticated user
@@ -141,6 +151,7 @@ class foursquare():
         """
         return self._return_result('history', username=username, password=password)
     
+    # User methods
     def get_user_detail(self, username, password, **kwargs):
         """
         Returns user details for a given uid or authenticated user
@@ -150,9 +161,9 @@ class foursquare():
         - password
         
         Keyword Arguments (optional):
-        - uid=xxx 
-        - mayor=1
-        - bages=1
+        - uid  (userid for the user)
+        - mayor (default is false, set to 1 to show)
+        - bages (default is false, set to 1 to show)
         """
         return self._return_result('user', username=username, password=password, params=kwargs)
     
@@ -165,19 +176,122 @@ class foursquare():
         - password
         
         keyword args (optional):
-        - uid=12345
+        - uid  (userid for the user)
         """
         return self._return_result('friends', username=username, password=password, params=kwargs)
     
-    def get_checkins(self, username, password, **kwargs):
+    # Venue methods    
+    def get_venues(self, lat, lon, **kwargs):
         """
-        Returns checkins for friends of authenticated user
+        Returns venues within range for a given lat & lon
         
-        Args (required):
-        - username
-        - password
+        args (required): 
+        lat
+        lon
+        
+        keyword args (Optional):
+        l   (Limit results)
+        q   (search for keyword)
+        """
+        kwargs['geolat'] = lat
+        kwargs['geolong'] = lon
+        return self._return_result('venues', params=kwargs)
+
+    def get_venue_detail(self, vid , username=None, password=None,):
+        """
+        Returns detailed info for a specific venue
+        
+        args (required):
+        - vid 
         
         keyword args (optional):
-        - cityid=12345
+        - username
+        - password
         """
-        return self._return_result('checkins', username=username, password=password, params=kwargs)
+        return self._return_result('venue', username=username, password=password, params={'vid': vid })
+    
+    def add_venue(self, username, password, name, address, crossstreet, city, state, cityid, **kwargs):
+        """
+        Adds a new venue
+        
+        args (required):
+        - username
+        - password
+        - name 
+        - address 
+        - crossstreet (the cross streets (e.g., "btw Grand & Broome"))
+        - city  (city name where this venue is)
+        - state  (the state where the city is or for non US insert country for state)
+        - cityid  (the cityid for the venue)
+        
+        Keyword agrs (optional)
+        - zip 
+        - phone
+        """
+        params = {'name': name,'address': address,'crossstreet':crossstreet,'city':city,'state':state,'cityid':cityid }
+        if kwargs.has_key('phone'):
+            params['phone'] = kwargs['phone']
+        if kwargs.has_key('zip'):
+            params['zip'] = kwargs['zip']
+        return self._return_result('addvenue', username=username, password=password, params=params, post=True)
+    
+    # Tip Methods
+        
+    def get_tips(self, geolat, geolong, **kwargs):
+        """
+        Returns tips within range of a given lat & lon
+        
+        args (required): 
+        - geolat
+        - geolong
+                
+        Keyword Args (optional):
+        - l (limit results)
+        """
+        kwargs['geolat'] = geolat
+        kwargs['geolong'] = geolong
+        return self._return_result('tips', params=kwargs)
+    
+    def add_tip(self, username, password, vid, text, **kwargs):
+        """
+        Adds a tip for a specific vid
+        
+        args (required):
+        - username
+        - password
+        - vid
+        - text
+        
+        keyword args (optional):
+        - type ('todo' or 'tip' defaults to tip)
+        """
+        kwargs['vid'] = vid
+        kwargs['text'] = text
+        return self._return_result('addtip', username=username, password=password, params=kwargs, post=True)
+    
+    # Settings Methods 
+    def set_pings(self, username, password, **kwargs):
+        """
+        Change ping settings for authenticated user or for friends of authenticated user
+        
+        args (required)
+        - username
+        - password
+        - At least one keyword arg
+        
+        keyword args (optional)
+        - me (global ping status for yourself. either on, off or goodnight.)
+        - friends (a list of dictionaries, see below)
+        
+        Note: 
+        friends takes a list of dictionaries with the following format: [{'uid': 123, 'ping': 1},{'uid': 123, 'ping': 0}]
+         1 = On, 0 = Off
+        """
+        if kwargs.has_key('me'):
+            kwargs['self'] = kwargs['me']
+            del kwargs['me']
+        if kwargs.has_key('friends'):
+            friendlist = kwargs.pop('friends')
+            for friend in friendlist:
+                kwargs[friend['uid']] = friend['ping']
+        return self._return_result('settings/setpings', username=username, password=password, params=kwargs, post=True)

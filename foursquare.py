@@ -90,7 +90,7 @@ class Api():
         """ 
             Test if an API request will succeed
         
-            Args: None
+            Arguments: None
         
             Returns: 
                 ``True``
@@ -105,7 +105,7 @@ class Api():
         """
             Returns all cities
         
-            Args: None
+            Arguments: None
         """
         return self._return_result('cities')
 
@@ -113,12 +113,11 @@ class Api():
         """
             Returns the closest foursquare city for a give lat & lon
         
-            args (required):
-        
-            ``geolat``
-                latitude
-            ``geolong``
-                longitude
+            Arguments (required):
+                ``geolat``
+                    latitude
+                ``geolong``
+                    longitude
         """
         params = {'geolat': geolat, 'geolong': geolong}
         return self._return_result('checkcity', params=params)
@@ -127,8 +126,7 @@ class Api():
         """
             Switch city for authenticated user to a given cityid
         
-            args (required):
-        
+            Arguments (required):
             ``username``
                 username of the user
             ``password``
@@ -142,13 +140,13 @@ class Api():
         """
             Returns checkins for friends of authenticated user
         
-            args (required):
+            Arguments (required):
                 ``username``
                     username of the user
                 ``password``
                     password of the user
         
-            keyword args (optional):
+            Keyword Arguments (optional):
                 ``cityid``
                     the foursquare cityid
         """
@@ -158,13 +156,13 @@ class Api():
         """
             Check in the authenticated user
         
-            Args (required):
+            Arguments (required):
                 ``username``
                     username of the user
                 ``password``
                     password of the user
                    
-            keyword args (optional):
+            Keyword Arguments (optional):
                 ``vid``
                     Foursquare venue ID
                 ``venue``
@@ -191,7 +189,7 @@ class Api():
         
             Returns a history for the authenticated user
         
-            args (required):
+            Arguments (required):
             ``username``
                 username of the user
             ``password``
@@ -203,7 +201,7 @@ class Api():
         """
             Returns user details for a given uid or authenticated user
         
-            args (Required):
+            Arguments (Required):
             ``username``
                 username of the user
             ``password``
@@ -225,13 +223,13 @@ class Api():
         """
             Returns friends for a given uid or authenticated user
         
-            Args (required):
+            Arguments (required):
                 ``username``
                     username of the user
                 ``password``
                     password of the user
         
-            keyword args (optional):
+            Keyword Arguments (optional):
                 ``uid``
                     userid for the user
         """
@@ -241,13 +239,13 @@ class Api():
         """
             Returns venues within range for a given lat & lon
         
-            args (required): 
+            Arguments (required): 
                 ``geolat``
                     latitude
                 ``geolong``
                     longitude
         
-            keyword args (Optional):
+            Keyword Arguments (optional):
                 ``l``
                     Limit the results returned
                 ``q``
@@ -261,11 +259,11 @@ class Api():
         """
             Returns detailed info for a specific venue
         
-            args (required):
+            Arguments (required):
                 ``vid``
                     Foursquare venue ID
         
-            keyword args (optional):
+            Keyword Arguments (optional):
                 ``username``
                     username of the user
                 ``password``
@@ -277,7 +275,7 @@ class Api():
         """
             Adds a new venue
         
-            args (required):
+            Arguments (required):
                 ``username``
                     username of the user
                 ``password``
@@ -295,11 +293,11 @@ class Api():
                 ``cityid``
                     the cityid for the venue
         
-        Keyword agrs (optional)
-            ``zip``
-                zip or postal code
-            ``phone``
-                phone number of the venue
+            Keyword Arguments (optional)
+                ``zip``
+                    zip or postal code
+                ``phone``
+                    phone number of the venue
         
         """
         params = {'name': name,'address': address,'crossstreet':crossstreet,'city':city,'state':state,'cityid':cityid }
@@ -313,13 +311,13 @@ class Api():
         """
             Returns tips within range of a given geplat & geolong
         
-            args (required): 
+            Arguments (required): 
                 ``geolat``
                     latitude
                 ``geolong``
                     longitude
                 
-            Keyword Args (optional):
+            Keyword Arguments (optional):
                 ``l`` 
                     limit results returned
         """
@@ -331,7 +329,7 @@ class Api():
         """
             Adds a tip for a specific vid
         
-            args (required):
+            Arguments (required):
                 ``username``
                     username of the user
                 ``password``
@@ -341,7 +339,7 @@ class Api():
                 ``text``
                     the tip text
             
-            keyword args (optional):
+            Keyword Arguments (optional):
                 ``type``
                     Set it as 'todo' or 'tip', defaults to tip
         """
@@ -353,13 +351,13 @@ class Api():
         """
             Change ping settings for authenticated user or for friends of authenticated user
         
-            args (required):
+            Arguments (required):
                 ``username``
                     username of the user
                 ``password``
                     password of the user
         
-            keyword args (optional):
+            Keyword Arguments (optional):
                 ``me`` 
                     Set global ping status for yourself. options are: on, off or goodnight
                 ``friends`` 

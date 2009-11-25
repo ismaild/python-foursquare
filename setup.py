@@ -9,7 +9,6 @@ long_description = open('README').read()
 setup(
     name='python-foursquare',
     version="0.1.1",
-    #package_dir={'foursquare': 'foursquare'},
     py_modules = ['foursquare'],
     description='A python library for the foursquare API',
     author='Ismail Dhorat',

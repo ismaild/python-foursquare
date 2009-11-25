@@ -1,4 +1,4 @@
-""
+""""
 
 Foursquare.py - v0.1.1
 =======================
@@ -22,6 +22,7 @@ Notes:
 - if authentication is required, username and password are the first two args.
 
 """
+
 import urllib2
 import urllib
 import base64

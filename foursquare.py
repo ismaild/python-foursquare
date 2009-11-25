@@ -13,7 +13,7 @@ License: see the file 'License'
 
 Usage:
 foursquare.method(requiredargs, optionalargs)
-help(foursquare) -``for help
+help(foursquare) - for help
 
 Notes:
 - arguments are required.
@@ -25,7 +25,11 @@ Notes:
 import urllib2
 import urllib
 import base64
-import simplejson
+
+try:
+    import simplejson
+except:
+    print 'Please install the required module simplejson'
 
 class Api():
     """
@@ -157,7 +161,7 @@ class Api():
                 ``username``
                     username of the user
                 ``password``
-                   password of the user
+                    password of the user
                    
             keyword args (optional):
                 ``vid``
@@ -175,8 +179,11 @@ class Api():
                 ``geolong``
                     longitude
         """
-        
-        return self._return_result('checkin', username=username, password=password, params=kwargs, post=True)
+        if kwargs.has_key('vid') or kwargs.has_key('venue') or kwargs.has_key('shout'):
+            result = self._return_result('checkin', username=username, password=password, params=kwargs, post=True)
+        else:
+            result = 'CheckIn method requires at least one of: vid, venue or shout'
+        return result
 
     def get_history(self, username, password):
         """
@@ -260,7 +267,7 @@ class Api():
             keyword args (optional):
                 ``username``
                     username of the user
-                    ``password``
+                ``password``
                     password of the user
         """
         return self._return_result('venue', username=username, password=password, params={'vid': vid })

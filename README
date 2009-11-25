@@ -1,5 +1,5 @@
 Foursquare.py - v0.1.4
-
+=======================
 A simple python wrapper for the foursquare API.
 
 http://www.foursquare.com
@@ -7,55 +7,295 @@ http://api.foursquare.com
 
 Created by Ismail Dhorat @ http://zyelabs.net
 
+License: see the file 'License'
+
 Usage:
-foursquare.method(requiredargs, optionalargs)
-help(foursquare) -- for help
+
+- foursquare.method(requiredargs, optionalargs)
+- help(foursquare) -``for help
 
 Notes:
-- arguments are required
-- keyword arguments are optional
-- the keyword is mapped to the key required by the foursquare API (except for set_pings)
-- if authentication is required, username and password are the first two args
 
-Usage:
-- import foursquare
-- f = foursquare.Api()
-- f.method(args, kwargs)
-
-Help:
-- View the docstrings
-- import the lib, and then run help(foursquare)
-
-API Methods defined:
-foursquare.Api.test()
-
-- Geo Methods
-foursquare.Api.get_cities()
-foursquare.Api.check_city()
-foursquare.Api.switch_city()
-
-- Check in Methods
-foursquare.Api.get_checkins()
-foursquare.Api.checkin()
-foursquare.Api.get_history()
-
-- User Methods
-foursquare.Api.get_user_detail()
-foursquare.Api.get_friends()
-
-- Venue Methods
-foursquare.Api.get_venues()
-foursquare.Api.get_venue_detail()
-foursquare.Api.add_venue()
-
--Tip Methods
-foursquare.Api.get_tips()
-foursquare.Api.add_tip()
-
-- Settings Methods
-foursquare.Api.set_pings()
+- arguments are required.
+- keyword arguments are optional.
+- the keyword is mapped to the key required by the foursquare API (except for set_pings).
+- if authentication is required, username and password are the first two args.
 
 
+class Api():
 
+    Foursquare API class that implements methods for the API
+    
+    args: None 
 
+    
+    _return_result(self, endpoint, username=None, password=None, params=None, post=None):
+        
+            Internal method to return the results
+        
+            Arguments (Required):
+                ``endpoint``
+                    The foursquare API endpoint for this request
+        
+            Keyword Arguments (Optional):
+                ``username``
+                    Required for authenticated requests
+                ``password``
+                    required for authenticated requests
+                ``params``
+                    Optional GET/POST parameters to send to the foursquare API
+                ``post``
+                    Only required for HTTP POST requests, set to True
+        
+        
+    test(self):
+         
+            Test if an API request will succeed
+        
+            Args: None
+        
+            Returns: 
+                ``True``
+                    Test was succesful
+                ``False``
+                    The query resulted in an Error
+        
+    
+    get_cities(self):
+        
+            Returns all cities
+        
+            Args: None
+        
 
+    check_city(self, geolat, geolong):
+        
+            Returns the closest foursquare city for a give lat & lon
+        
+            Arguments (required):
+            	``geolat``
+                	latitude
+            	``geolong``
+                	longitude
+        
+    
+    switch_city(self, username, password, cityid):
+        
+            Switch city for authenticated user to a given cityid
+        
+            Arguments (required):
+            	``username``
+                	username of the user
+            	``password``
+                	password of the user
+            	``cityid``
+                	the foursquare cityid being switched to
+        
+
+    get_checkins(self, username, password, **kwargs):
+        
+            Returns checkins for friends of authenticated user
+        
+            Arguments (required):
+                ``username``
+                    username of the user
+                ``password``
+                    password of the user
+        
+            Keyword Arguments (optional):
+                ``cityid``
+                    the foursquare cityid
+        
+    
+    checkin(self, username, password, **kwargs):
+        
+            Check in the authenticated user
+        
+            Arguments (required):
+                ``username``
+                    username of the user
+                ``password``
+                   password of the user
+                   
+            Keyword Arguments (optional):
+                ``vid``
+                    Foursquare venue ID
+                ``venue``
+                    String name of the venue - The API will try and find the closest match
+                ``shout``
+                    Text to send with checkin, max length is 140
+                ``private`` 
+                    hides location set to 1 or 0
+                ``twitter``
+                    1 or 0, defaults to setting in the users profile
+                ``geolat``
+                    latitude
+                ``geolong``
+                    longitude
+        
+
+    get_history(self, username, password):
+              
+            Returns a history for the authenticated user
+        
+            Arguments (required):
+            	``username``
+                	username of the user
+            	``password``
+               		password of the user
+        
+    
+    get_user_detail(self, username, password, **kwargs):
+        
+            Returns user details for a given uid or authenticated user
+        
+            Arguments (required):
+            	``username``
+                	username of the user
+            	``password``
+                	password of the user
+        
+            Keyword Arguments (optional):
+            	``uid``
+                	userid for the user
+            	``mayor``
+                	default is false, set to 1 to show
+            	``bages``
+                	default is false, set to 1 to show
+        
+        
+    
+    get_friends(self, username, password, **kwargs):
+        
+            Returns friends for a given uid or authenticated user
+        
+            Arguments (required):
+                ``username``
+                    username of the user
+                ``password``
+                    password of the user
+        
+            Keyword Arguments (optional):
+                ``uid``
+                    userid for the user
+        
+
+    get_venues(self, geolat, geolong, **kwargs):
+        
+            Returns venues within range for a given lat & lon
+        
+            Arguments (required): 
+                ``geolat``
+                    latitude
+                ``geolong``
+                    longitude
+        
+            Keyword Arguments (Optional):
+                ``l``
+                    Limit the results returned
+                ``q``
+                    search for a keyword
+        
+
+    get_venue_detail(self, vid , username=None, password=None,):
+        
+            Returns detailed info for a specific venue
+        
+            Arguments (required):
+                ``vid``
+                    Foursquare venue ID
+        
+            Keyword Arguments (optional):
+                ``username``
+                   	username of the user
+           		``password``
+                    password of the user
+        
+    
+    add_venue(self, username, password, name, address, crossstreet, city, state, cityid, **kwargs):
+        
+            Adds a new venue
+        
+            Arguments (required):
+                ``username``
+                    username of the user
+                ``password``
+                    password of the user
+                ``name``
+                    the venue name
+                ``address`` 
+                    the address of the venue
+                ``crossstreet`` 
+                    the cross streets (e.g., "btw Grand & Broome")
+                ``city``
+                    city name where this venue is)
+                ``state``
+                    the state where the city is or for non US insert country for state)
+                ``cityid``
+                    the cityid for the venue
+        
+        	Keyword agrs (optional)
+            	``zip``
+                	zip or postal code
+            	``phone``
+                	phone number of the venue
+        
+        
+        
+    get_tips(self, geolat, geolong, **kwargs):
+        
+            Returns tips within range of a given geplat & geolong
+        
+            Arguments (required): 
+                ``geolat``
+                    latitude
+                ``geolong``
+                    longitude
+                
+            Keyword Arguments (optional):
+                ``l`` 
+                    limit results returned
+        
+    
+    add_tip(self, username, password, vid, text, **kwargs):
+        
+            Adds a tip for a specific vid
+        
+            Arguments (required):
+                ``username``
+                    username of the user
+                ``password``
+                    password of the user
+                ``vid``
+                    Foursquare venue ID
+                ``text``
+                    the tip text
+            
+            Keyword Arguments (optional):
+                ``type``
+                    Set it as 'todo' or 'tip', defaults to tip
+        
+    
+    set_pings(self, username, password, **kwargs):
+        
+            Change ping settings for authenticated user or for friends of authenticated user
+        
+            Arguments (required):
+                ``username``
+                    username of the user
+                ``password``
+                    password of the user
+        
+            Keyword Arguments (optional):
+                ``me`` 
+                    Set global ping status for yourself. options are: on, off or goodnight
+                ``friends`` 
+                    a list of dictionaries
+
+        Note: 
+        
+        - friends takes a list of dictionaries in the following format: [{'uid': 123, 'ping': 1},{'uid': 123, 'ping': 0}]
+        - 1 = On
+        - 0 = Off
+         
+        

@@ -82,8 +82,7 @@ class Api():
         try:
             result = simplejson.load(urllib2.urlopen(request))
         except IOError, e:
-            if e.code:
-                result = e
+            result = simplejson.load(e)
         return result
         
     def test(self):

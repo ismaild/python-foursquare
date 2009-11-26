@@ -5,17 +5,17 @@ A simple python wrapper for the foursquare API.
 http://www.foursquare.com
 http://api.foursquare.com
 
-Created by Ismail Dhorat @ http://zyelabs.net
+More details:
+http://ismaild.com/foursquare-api-python/ 
 
-Usage:
-foursquare.method(requiredargs, optionalargs)
-help(foursquare) -- for help
+Created by Ismail Dhorat - ismail@zyelabs.net
 
 Notes:
 - arguments are required
 - keyword arguments are optional
 - the keyword is mapped to the key required by the foursquare API (except for set_pings)
 - if authentication is required, username and password are the first two args
+- use help(foursquare) for details on required arguments
 
 Usage:
 - import foursquare

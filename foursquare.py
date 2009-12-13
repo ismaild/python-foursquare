@@ -251,7 +251,7 @@ class Api():
                     search for a keyword
         """
         kwargs['geolat'] = geolat
-        kwargs['geolong'] = geolon
+        kwargs['geolong'] = geolong
         return self._return_result('venues', params=kwargs)
 
     def get_venue_detail(self, vid , username=None, password=None,):

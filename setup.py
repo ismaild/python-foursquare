@@ -7,7 +7,7 @@ except:
 long_description = open('README').read()
  
 setup(
-    name='python-foursquare',
+    name='foursquare',
     version="0.1.1",
     py_modules = ['foursquare'],
     description='A python library for the foursquare API',
